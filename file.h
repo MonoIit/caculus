@@ -4,22 +4,22 @@
 #include <QDialog>
 
 namespace Ui {
-class File;
+class file;
 }
 
-class File : public QDialog
+class file : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit File(QWidget *parent = nullptr);
-    ~File();
+    explicit file(QWidget *parent = nullptr);
+    ~file();
 
 private:
-    Ui::File *ui;
+    Ui::file *ui;
 signals:
     void filePath(const QString &str);
-private:
+private slots:
     void okClicked();
 };
 
