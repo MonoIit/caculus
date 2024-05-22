@@ -13,7 +13,6 @@ private:
     double power(char *str, int &index);  // функция для извлечения степени
     double number(char *str, int &index); // функция, распознающая число
 public:
-    std::unordered_map<std::string, double> storage;
     QString calculate(QString strr);
 };
 

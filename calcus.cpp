@@ -20,7 +20,7 @@ struct pairs
 };
 
 char *extract(char *str, int &index); // функция для извлечения подстроки
-
+std::unordered_map<std::string, double> storage;
 const int MAX = 80; // максимальный размер буфера
 const double e = 2.71828;
 
@@ -49,47 +49,33 @@ double Log(double a, double b)
 
 QString calcus::isParam(char *str)
 {
-    char testbuffer[MAX];
+    std::string buf;
+    char testbuffer[MAX] = {0};
     int index = 0;
-    while (*(str + index++))
-        //проверка, что строка в хранилище
-    char param[MAX];
-    int ii;
-    for (int i = 0; i <= 10; i++)
+    while (*(str + index))
     {
-        ii = i;
-        if (*(str + i) == '=')
+        if (*(str + index) == '=')
         {
-            break;
+            buf = testbuffer;
+            if (storage.find(buf) == storage.end())
+                storage[buf] = 0;
+            char buffer[MAX] = {0};
+            int i = index+1;
+            while (*(str + index++))
+            {
+                buffer[index-i] = *(str + index);
+            }
+            QString val;
+            storage[buf] = expr(buffer);
+            val = QString::number(storage[buf]);
+            return val;
         }
-        param[i] = *(str + i);
+        testbuffer[index] = *(str + index);
+        index++;
     }
-    char buffer[MAX] = {0};
-    if (ii < 10)
-    {
-        std::string sttr;
-        sttr = param;
-        storage[sttr] = 0;
-        for (int i = (ii+1); i <= 80; i++)
-        {
-            buffer[i-ii-1] = *(str + i);
-        }
-        QString val;
-        storage[sttr] = expr(buffer);
-        val = QString::number(storage[sttr]);
-        return val;
-    }
-    else
-    {
-        for (int i = 0; i <= 80; i++)
-        {
-            buffer[i] = *(str + i);
-        }
-        QString val;
-        val = QString::number(expr(buffer));
-        return val;
-    }
-
+    QString val;
+    val = QString::number(expr(testbuffer));
+    return val;
 }
 
 void calcus::eatspaces(char *str)
@@ -233,7 +219,13 @@ double calcus::trigon(char *str, int &index)
     }
     else
     {
-        return value;
+        std::string val;
+        val = p_str;
+        if (storage.find(val) == storage.end())
+            return value;
+        index = temp_index;
+        delete[] p_str; // не забываем удалить временную строку
+        return storage[val];
     }
 }
 
